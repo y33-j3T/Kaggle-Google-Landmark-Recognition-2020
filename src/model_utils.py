@@ -5,18 +5,16 @@
 import matplotlib.pyplot as plt
 
 from keras import layers, models, optimizers
-from keras.preprocessing.image import ImageDataGenerator
-from keras.preprocessing import image
-from keras.applications import ResNet50V2, VGG16
+from keras.callbacks import TensorBoard
 from glob import glob
 
 
-def build_model(conv_base):
+def build_model(conv_base, num_class):
     model = models.Sequential()
     model.add(conv_base)
     model.add(layers.Flatten())
     model.add(layers.Dense(256, activation='relu'))
-    model.add(layers.Dense(252, activation='softmax'))
+    model.add(layers.Dense(num_class, activation='softmax'))
     return model
 
 
@@ -42,11 +40,13 @@ def compile_model(model):
 
 
 def fit_model(model, train_generator, validation_generator):
+    callbacks = [TensorBoard("logs")]
     history = model.fit(train_generator,
-                        steps_per_epoch=100,
+                        # steps_per_epoch=100,
                         epochs=10,
                         validation_data=validation_generator,
-                        validation_steps=50)
+                        # validation_steps=50,
+                        callbacks=callbacks)
     return model, history
 
 

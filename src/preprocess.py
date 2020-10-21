@@ -23,18 +23,12 @@ PROCESSED_DIR = os.path.join(DATA_DIR, 'processed')
 TRAIN = os.path.join(RAW_DIR, 'train')
 TEST = os.path.join(RAW_DIR, 'test')
 DF_TRAIN = os.path.join(TRAIN, 'train.csv')
-LANDMARK_INDICES100 = os.path.join(RAW_DIR, 'landmark_indices100.csv')
 SAMPLE_SUBMISSION = os.path.join(RAW_DIR, 'sample_submission.csv')
 
 # interim data
 TRAIN_BY_CLASS = os.path.join(INTERIM_DIR, 'train')
 VALIDATION_BY_CLASS = os.path.join(INTERIM_DIR, 'validation')
 TEST_BY_CLASS = os.path.join(INTERIM_DIR, 'test')
-
-# trained models on cloud
-XCEPTION_100 = 'xception_100epoch.h5'
-RESNET50V2_100 = 'model2_100epoch.h5'
-RESNET50V2_10 = 'model2_10epoch.h5'
 
 #######################
 # Data Pre-processing #
@@ -171,7 +165,7 @@ if __name__ == "__main__":
     min_img = int(sys.argv[1])
     num_validation = int(sys.argv[2])
     num_test = int(sys.argv[3])
-    
+
     mkdir_by_class(remove_old=True)
     df_train = make_df_train()
     split_dataset(df_train, min_img, num_validation, num_test)
