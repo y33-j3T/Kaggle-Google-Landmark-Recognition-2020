@@ -34,9 +34,9 @@ def freeze_conv_base(model, conv_base):
         'after freezing the conv base:', len(model.trainable_weights))
 
 
-def compile_model(model):
+def compile_model(model, lr):
     model.compile(loss='categorical_crossentropy',
-                  optimizer=optimizers.Adam(lr=2e-5),
+                  optimizer=optimizers.Adam(lr=lr),
                   metrics=[
                         'acc', 
                         CategoricalAccuracy(name="categorical_accuracy", dtype=None),
@@ -44,6 +44,23 @@ def compile_model(model):
                     ]
     )
     return model
+
+
+def set_fine_tune_layers(model, conv_base, layer_start):
+    model.trainable = True
+
+    set_trainable = False
+    for layer in model.get_layer(conv_base).layers:
+        if layer.name == layer_start:
+            set_trainable = True
+        
+        if set_trainable:
+            layer.trainable = True
+        else:
+            layer.trainable = False
+
+        if layer.name.endswith("_bn"):
+            layer.trainable = False
 
 
 def fit_model(model, train_generator, validation_generator, epochs, callback_dir, models_dir):
